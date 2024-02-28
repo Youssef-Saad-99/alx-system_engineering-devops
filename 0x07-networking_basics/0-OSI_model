@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# This script that answer OSI Model questions
+echo "2"
+echo "2"
