@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 # This script is that answer MAC and IP address questions
 echo "2"
-echo "3"
+echo "1"
