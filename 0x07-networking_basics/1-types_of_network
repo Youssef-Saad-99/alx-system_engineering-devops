@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-# This script is that answer types of network questions
-echo "3"
-echo "2"
-echo "1"
