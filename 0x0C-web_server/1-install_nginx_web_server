@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# This script configures a new Ubuntu machine to respect requirements
+# Update package lists
+apt-get update
+
+# Install nginx
+apt-get install -y nginx
+
+# Configure nginx to listen on port 80
+sed -i 's/^\(.*listen.*\)80/\180/' /etc/nginx/sites-available/default
+
+# Restart nginx (without systemctl)
+service nginx restart || /etc/init.d/nginx restart
+
+# Create a simple HTML page with "Hello World!"
+echo "<html><body>Hello World!</body></html>" > /var/www/html/index.html
