@@ -9,7 +9,9 @@ sudo ufw allow 'Nginx HTTP'
 sudo mkdir -p /var/www/html
 sudo chmod -R 755 /var/www
 # Display Hello World!
-echo "Hello World!" > /var/www/html/index.html
+sudo touch /var/www/html/index.html
+sudo chmod 755 /var/www/html/index.html
+sudo echo "Hello World!" | sudo tee /var/www/html/index.html
 # test
 sudo nginx -t
 # restart and reload 
