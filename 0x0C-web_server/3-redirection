@@ -1,34 +1,21 @@
 #!/usr/bin/env bash
-# Installs, configures, and starts the server
-apt-get update
-apt-get -y install nginx
+# This script install nginx
+# Update package lists
+sudo apt-get update
+# Install nginx
+sudo apt-get install -y nginx
+# Configure nginx to listen on port 80
 sudo ufw allow 'Nginx HTTP'
-mkdir -p /var/www/html/
+sudo mkdir -p /var/www/html
 sudo chmod -R 755 /var/www
-echo 'Hello World!' > /var/www/html/index.html
-SERVER_CONFIG=\
-"server {
-	listen 80 default_server;
-	listen [::]:80 default_server;
-
-	root /var/www/html;
-	index index.html index.htm index.nginx-debian.html;
-
-	server_name _;
-
-	location / {
-		try_files \$uri \$uri/ =404;
-	}
-
-	if (\$request_filename ~ redirect_me){
-		rewrite ^ https://sketchfab.com/bluepeno/models permanent;
-	}
-}"
-
-bash -c "echo -e '$SERVER_CONFIG' > /etc/nginx/sites-enabled/default"
-
-if [ "$(pgrep -c nginx)" -le 0 ]; then
-	service nginx start
-else
-	service nginx restart
-fi
+# Display Hello World!
+sudo touch /var/www/html/index.html
+sudo chmod 755 /var/www/html/index.html
+sudo echo "Hello World!" | sudo tee /var/www/html/index.html
+string_for_replacement="server_name _;\n\trewrite ^\/redirect_me https:\/\/github.com\/Youssef-Saad-99 permanent;"
+sudo sed -i "s/server_name _;/$string_for_replacement/" /etc/nginx/sites-enabled/default
+# test
+sudo nginx -t
+# restart and reload 
+sudo service nginx restart
+sudo service nginx reload
