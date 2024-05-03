@@ -1,33 +1,17 @@
 #!/usr/bin/env bash
-# This script configures a new Ubuntu machine to respect requirements
+# This script install nginx
 # Update package lists
-apt-get update
+sudo apt-get update
 # Install nginx
-apt-get install -y nginx
+sudo apt-get install -y nginx
 # Configure nginx to listen on port 80
 sudo ufw allow 'Nginx HTTP'
-mkdir -p /var/www/html
-chmod -R 755 /var/www
-echo 'Hello World!' > /var/www/html/index.html
-SERVER_CONFIG=\
-"server {
-	listen 80 default_server;
-	listen [::]:80 default_server;
-
-	root /var/www/html;
-	index index.html index.htm index.nginx-debian.html;
-
-	server_name _;
-
-	location / {
-		try_files \$uri \$uri/ =404;
-	}
-}"
-
-bash -c "echo -e '$SERVER_CONFIG' > /etc/nginx/sites-enabled/default"
-
-if [ "$(pgrep -c nginx)" -le 0 ]; then
-	service nginx start
-else
-	service nginx restart
-fi
+sudo mkdir -p /var/www/html
+sudo chmod -R 755 /var/www
+# Display Hello World!
+echo "Hello World!" > /var/www/html/index.html
+# test
+sudo nginx -t
+# restart and reload 
+sudo service nginx restart
+sudo service nginx reload
