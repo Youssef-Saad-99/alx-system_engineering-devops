@@ -1,40 +1,27 @@
+
 #!/usr/bin/env bash
-# Installs, configures, and starts the server
-apt-get update
-apt-get -y install nginx
-ufw allow 'Nginx HTTP'
-mkdir -p /var/www/html /var/www/error
-chmod -R 755 /var/www
-echo 'Hello World!' > /var/www/html/index.html
-echo -e "Ceci n\x27est pas une page" > /var/www/error/404.html
-# the server's configuration
-SERVER_CONFIG=\
-"server {
-	listen 80 default_server;
-	listen [::]:80 default_server;
-
-	root /var/www/html;
-	index index.html index.htm index.nginx-debian.html;
-
-	server_name _;
-
-	location / {
-		try_files \$uri \$uri/ =404;
-	}
-
-	if (\$request_filename ~ redirect_me){
-		rewrite ^ https://sketchfab.com/bluepeno/models permanent;
-	}
-
-	error_page 404 /404.html;
-	location = /404.html {
-		root /var/www/error/;
-		internal;
-	}
-}"
-bash -c "echo -e '$SERVER_CONFIG' > /etc/nginx/sites-enabled/default"
-if [ "$(pgrep -c nginx)" -le 0 ]; then
-	service nginx start
-else
-	service nginx restart
-fi
+# This script install nginx
+# Update package lists
+sudo apt-get update
+# Install nginx
+sudo apt-get install -y nginx
+# Configure nginx to listen on port 80
+sudo ufw allow 'Nginx HTTP'
+sudo mkdir -p /var/www/html
+sudo chmod -R 755 /var/www
+# Display Hello World!
+sudo touch /var/www/html/index.html
+sudo chmod 755 /var/www/html/index.html
+sudo echo "Hello World!" | sudo tee /var/www/html/index.html
+string_for_replacement="server_name _;\n\trewrite ^\/redirect_me https:\/\/github.com\/Youssef-Saad-99 permanent;"
+sudo sed -i "s/server_name _;/$string_for_replacement/" /etc/nginx/sites-enabled/default
+# error configuration
+sudo echo "Ceci n'est pas une page" | sudo tee /var/www/html/404.html
+string_for_replacement="listen 80 default_server;\n\terror_page 404 \/404.html;\n\tlocation = \/404.html {\n\t\t
+root \/var\/www\/html;\n\t\tinternal;\n\t}"
+sudo sed -i "s/listen 80 default_server;/$string_for_replacement/" /etc/nginx/sites_enabled/default
+# test
+sudo nginx -t
+# restart and reload 
+sudo service nginx restart
+sudo service nginx reload
